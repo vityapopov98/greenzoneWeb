@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Client</title>
+</head>
+<body>
+    <H1>welocome to client</H1>
+    <form action="/login" method="post">
+        <input type="text" placeholder="user name" name="username">
+        <button type="submit">Войти</button>
+    </form>
+    <div id="place">
+
+    </div>
+
+    <script>
+        // Create WebSocket connection.
+    const socket = new WebSocket('ws://localhost:3000');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        socket.send('Hello Server! Im inet client');
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+        var place = document.getElementById('place')
+        place.innerText = event.data
+    });
+    </script>
+</body>
+</html>
