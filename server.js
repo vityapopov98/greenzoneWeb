@@ -14,6 +14,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('./client/dist'));
 
+var dataFromHome = {
+  destinationName: String,
+  payload: String
+}
+
 
 wss.on('connection', function connection(ws) {
     console.log('new connection')
@@ -23,6 +28,7 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
       console.log('received: %s', message);
       // ws.send('Ну задрова')
+      dataFromHome = message
 
       wss.clients.forEach(function each(client) {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
@@ -45,6 +51,17 @@ wss.on('connection', function connection(ws) {
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + "/index.html")
+})
+
+app.get('/dataFromHome', (req, res)=>{
+  console.log('GET /data from home. Reply with data ', dataFromHome)
+  res.json(dataFromHome)
+
+})
+app.get('/iphone', (req, res)=>{
+  console.log('GET /data from home. Reply with data ', dataFromHome)
+  res.json({data: 'hi iPhone'})
+
 })
 
 const PORT = process.env.PORT || 3000;
